@@ -7,15 +7,14 @@ const PROTO_PATH = './music_streaming.proto';
 const packageDefinition = protoLoader.loadSync(PROTO_PATH);
 const musicProto = grpc.loadPackageDefinition(packageDefinition).musicstreaming;
 
-// Dados fictícios
 const users = [
   { id: 1, name: 'Alice', age: 25 },
   { id: 2, name: 'Bob', age: 30 },
 ];
 
 const songs = [
-  { id: 1, name: 'Song A', artist: 'Artist X' },
-  { id: 2, name: 'Song B', artist: 'Artist Y' },
+  { id: 1, name: 'musica A', artist: 'Artista X' },
+  { id: 2, name: 'musica B', artist: 'Artista Y' },
 ];
 
 const playlists = [
@@ -34,19 +33,45 @@ server.addService(musicProto.MusicService.service, {
     callback(null, { songs });
   },
   ListPlaylistsByUser: (call, callback) => {
-    const userId = call.request.id;
+    const userId = 2; //call.request.id;
     const userPlaylists = playlists.filter(p => p.userId === userId);
     callback(null, { playlists: userPlaylists });
   },
   ListSongsByPlaylist: (call, callback) => {
-    const playlistId = call.request.id;
-    const playlist = playlists.find(p => p.id === playlistId);
-    const playlistSongs = songs.filter(s => playlist.songIds.includes(s.id));
+    const playlistId = 1; //call.request.id;
+    //const playlist = [];
+    const playlistSongs = [];
+    while(true)
+      {
+        if(playlists[i].id == playlistId)
+        {
+          for(let j = 0; j < playlists[i].songIds.length; j++)
+          {
+            var songId = playlists[i].songIds[j];
+            var song = songs[songId].name;
+            playlistSongs.push(song);
+          }
+        }
+        i++;
+        if(i > 3) break;
+      }
     callback(null, { songs: playlistSongs });
   },
   ListPlaylistsBySong: (call, callback) => {
-    const songId = call.request.id;
-    const relatedPlaylists = playlists.filter(p => p.songIds.includes(songId));
+    const songId = 1; //call.request.id;
+    var relatedPlaylists = [];
+    var i = 0;
+    while(true)
+    {
+      if(playlists[i].id == songId)
+      {
+        relatedPlaylists[0] = playlists[i];
+        break;
+      }
+      i++;
+      if(i > 3) break;
+    }
+    console.log(relatedPlaylists);
     callback(null, { playlists: relatedPlaylists });
   },
 });

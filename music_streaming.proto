@@ -3,52 +3,54 @@ syntax = "proto3";
 package musicstreaming;
 
 service MusicService {
-  rpc ListUsers(Empty) returns (UserList);
-  rpc ListSongs(Empty) returns (SongList);
-  rpc ListPlaylistsByUser(UserId) returns (PlaylistList);
-  rpc ListSongsByPlaylist(PlaylistId) returns (SongList);
-  rpc ListPlaylistsBySong(SongId) returns (PlaylistList);
+    rpc ListUsers (Empty) returns (UserList);
+    rpc ListSongs (Empty) returns (SongList);
+    rpc ListPlaylistsByUser (UserRequest) returns (PlaylistList);
+    rpc ListSongsByPlaylist (PlaylistRequest) returns (SongList);
+    rpc ListPlaylistsBySong (SongRequest) returns (PlaylistList);
 }
 
 message Empty {}
 
+message UserRequest {
+    string id = 1;
+}
+
+message PlaylistRequest {
+    string id = 1;
+}
+
+message SongRequest {
+    string id = 1;
+}
+
 message User {
-  int32 id = 1;
-  string name = 2;
-  int32 age = 3;
+    int32 id = 1;
+    string name = 2;
+    int32 age = 3;
 }
 
 message Song {
-  int32 id = 1;
-  string name = 2;
-  string artist = 3;
+    int32 id = 1;
+    string name = 2;
+    string artist = 3;
 }
 
 message Playlist {
-  int32 id = 1;
-  string name = 2;
+    int32 id = 1;
+    string name = 2;
+    int32 userId = 3;
+    repeated int32 songIds = 4;
 }
 
 message UserList {
-  repeated User users = 1;
+    repeated User users = 1;
 }
 
 message SongList {
-  repeated Song songs = 1;
+    repeated Song songs = 1;
 }
 
 message PlaylistList {
-  repeated Playlist playlists = 1;
-}
-
-message UserId {
-  int32 id = 1;
-}
-
-message PlaylistId {
-  int32 id = 1;
-}
-
-message SongId {
-  int32 id = 1;
+    repeated Playlist playlists = 1;
 }
